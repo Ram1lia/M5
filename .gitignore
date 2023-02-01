@@ -1,0 +1,14 @@
+Lib
+Scripts
+templates
+pyvenv.cfg
+venv
+.idea
+static
+media
+db.sqlite3
+migrations
+command.sh
+req.txt
+*.md
+__pycache__/
