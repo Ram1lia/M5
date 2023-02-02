@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'AfishaA.urls'
+ROOT_URLCONF = 'Afisha.urls'
 
 TEMPLATES = [
     {
