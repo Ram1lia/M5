@@ -25,11 +25,11 @@ urlpatterns = [
     # path('api/v1/test/', views.test),
     path('api/v1/directors/', directors_view ),
     path('api/v1/directors/<int:id>/',director_detail_view ),
-    path('api/v1/movies/',movie_view ),
+    path('api/v1/movies/',movies_view),
     path('api/v1/movies/<int:id>/',movie_detail_view ),
-    path('api/v1/reviews/', review_view),
+    path('api/v1/reviews/', reviews_view),
     path('api/v1/reviews/<int:id>/', review_detail_view),
-    path('movies/reviews/', movie_review_view),
+    path('movies/reviews/', movies_reviews_view),
 
 
 ]
