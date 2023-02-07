@@ -1,9 +1,13 @@
-from django.shortcuts import render
+
 from movie_app.models import *
 from movie_app.serializers import *
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.viewsets import ModelViewSet, ViewSet
+
 @api_view(['GET', 'POST'])
 def movies_view(request):
     if request.method == 'GET':
@@ -24,6 +28,13 @@ def movies_view(request):
         return Response(data={'message':'Data recieved',
                               'movie': MovieSerializer(movie).data},
                         status=status.HTTP_201_CREATED)
+
+
+class DirectorModelViewSet(ModelViewSet):
+    queryset = Director.objects.all()
+    serializer_class = DirectorSerializer
+    pagination_class = PageNumberPagination
+
 
 @api_view(['GET', 'PUT', 'DELETE'])
 def movie_detail_view(request, **kwargs):
@@ -52,6 +63,11 @@ def movie_detail_view(request, **kwargs):
                          'movie': MovieSerializer(movie).data},
                         status=status.HTTP_201_CREATED)
 
+class MovieModelViewSet(ModelViewSet):
+    queryset = Movie.objects.all()
+    serializer_class = MovieSerializer
+    pagination_class = PageNumberPagination
+
 
 @api_view(['GET', 'POST'])
 def directors_view(request, **kwargs):
@@ -68,6 +84,10 @@ def directors_view(request, **kwargs):
                          'director': DirectorSerializer(director).data},
                         status=status.HTTP_201_CREATED)
 
+
+class ReviewModelViewSet(ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -136,6 +156,8 @@ def review_detail_view(request, **kwargs):
                         data={"message": "Review was changed!",
                               "review": ReviewSerializer(review).data})
 
+
+
 @api_view(['GET'])
 def movies_reviews_view(request):
     if request.method == 'GET':
@@ -143,3 +165,7 @@ def movies_reviews_view(request):
 
         serializer = MovieReviewSerializer(movie, many=True)
         return Response(data=serializer.data)
+
+class ReviewMovieListAPIView(ListAPIView):
+    queryset = Movie.objects.all()
+    serializer_class = MovieReviewSerializer
