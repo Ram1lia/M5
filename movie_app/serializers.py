@@ -9,11 +9,11 @@ class DirectorSerializer(serializers.ModelSerializer):
         model = Director
         fields = '__all__'
 
+
 class DirectorDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Director
         fields = 'id name '.split()
-
 
 
 class MovieSerializer(serializers.ModelSerializer):
@@ -29,7 +29,7 @@ class MovieDetailSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    class Meta :
+    class Meta:
         model = Review
         fields = '__all__'
 
@@ -43,13 +43,14 @@ class ReviewDetailSerializer(serializers.ModelSerializer):
 class MovieReviewSerializer(serializers.ModelSerializer):
     review = ReviewSerializer()
     rating = serializers.SerializerMethodField()
+
     class Meta:
         model = Movie
         field = '__all__'
-    def get_rating(self):
-        r = [review.grade for review in review.all()]
-        return sum(r)/ len(r) if r else None
 
+    def get_rating(self, obj):
+        r = [review.grade for review in obj.review.all()]
+        return sum(r) / len(r) if r else None
 
 
 class MovieValidateSerializer(serializers.Serializer):
@@ -74,10 +75,11 @@ class MovieCreateSerializer(MovieValidateSerializer):
 
 
 class MovieUpdateSerializer(MovieValidateSerializer):
-       def validate_title(self, title):
+    def validate_title(self, title):
         if Movie.objects.filter(title=title).exclude(id=self.context.get("id")).count() > 0:
             raise ValidationError("title must be unique!")
         return title
+
 
 class DirectorValidateSerializer(serializers.Serializer):
     name = serializers.CharField()
@@ -87,6 +89,7 @@ class DirectorValidateSerializer(serializers.Serializer):
             raise ValidationError("name must be unique!")
         return name
 
+
 class DirectorUpdateSerializer(serializers.Serializer):
     name = serializers.CharField()
 
@@ -94,6 +97,7 @@ class DirectorUpdateSerializer(serializers.Serializer):
         if Director.objects.filter(name=name).exclude(id=self.context.get("id")).count() > 0:
             raise ValidationError("name must be unique!")
         return name
+
 
 class ReviewValidateSerializer(serializers.Serializer):
     text = serializers.CharField()
@@ -105,6 +109,3 @@ class ReviewValidateSerializer(serializers.Serializer):
         except Movie.DoesNotExist:
             raise ValidationError("Movie not found!")
         return movie
-
-
-
